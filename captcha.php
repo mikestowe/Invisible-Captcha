@@ -8,15 +8,13 @@ class captcha {
 		
 		if(!isset($_SESSION['invisibleCaptcha']['code'])) {
 			$_SESSION['invisibleCaptcha']['code'] = rand(1111111111,99999999999999);
-			$_SESSION['invisibleCaptcha']['safety'] = false;
 			$_SESSION['invisibleCaptcha']['jHack'] = rand(222222,333333);
 			$_SESSION['invisibleCaptcha']['vURL'] = $this->url;
 			$_SESSION['invisibleCaptcha']['vHost'] = $this->referer;
-		} elseif(isset($_SESSION['invisibleCaptcha']['code']) && isset($_GET['invisibleCaptcha']) && !$_SESSION['invisibleCaptcha']['safety'] && $_SERVER['HTTP_REFERER'] == $_SESSION['invisibleCaptcha']['vURL']) {
+		} elseif(isset($_SESSION['invisibleCaptcha']['code']) && isset($_GET['invisibleCaptcha']) && $_SERVER['HTTP_REFERER'] == $_SESSION['invisibleCaptcha']['vURL']) {
 			echo (string) $_SESSION['invisibleCaptcha']['code'];
-			$_SESSION['invisibleCaptcha']['safety'] = true;
 			die();
-		} elseif(isset($_SESSION['invisibleCaptcha']['code']) && isset($_GET['invisibleCaptcha']) && ($_SESSION['invisibleCaptcha']['safety'] || $_SERVER['HTTP_REFERER'] != $_SESSION['invisibleCaptcha']['vURL'])) {
+		} elseif(isset($_SESSION['invisibleCaptcha']['code']) && isset($_GET['invisibleCaptcha']) && $_SERVER['HTTP_REFERER'] != $_SESSION['invisibleCaptcha']['vURL']) {
 			// probable attack, reset information
 			unset($_SESSION['invisibleCaptcha']);
 		}
