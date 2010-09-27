@@ -1,4 +1,24 @@
 <?php
+// Wordpress Plugin
+if(defined('WP_PLUGIN_DIR')) {
+	add_action('comment_post', 'InvisibleCaptchaTest');
+	add_action('wp_footer', 'AddInvisibleCaptcha');
+	
+	function InvisibleCaptchaTest($comment_id) {
+		$captcha = new captcha;
+		if($captcha->verify()) {
+			do_action('wp_set_comment_status', $comment_id, 'approve');
+		} else {
+			do_action('wp_set_comment_status', $comment_id, 'delete');
+		}
+	}
+	
+	function AddInvisibleCaptcha() {
+		$captcha = new captcha;
+		$captcha->add('commentform',true);
+	}
+}
+
 // This class requires session_start() be run before calling it, but must be initiated before any non-header data is sent
 
 class captcha {
